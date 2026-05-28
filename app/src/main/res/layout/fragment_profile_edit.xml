@@ -12,13 +12,13 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Аватарка -->
+        <!-- ава -->
         <FrameLayout
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="32dp"
-            android:background="@drawable/bg_circle_gray"> <!-- Если есть круглый фон, используйте его -->
+            android:background="@drawable/bg_circle_gray">
 
             <ImageView
                 android:id="@+id/ivAvatar"
@@ -28,7 +28,7 @@
                 android:layout_gravity="center" />
         </FrameLayout>
 
-        <!-- Поля с информацией -->
+        <!-- инфа -->
         <EditText
             android:id="@+id/etNameProfile"
             style="@style/AppInput"
@@ -76,7 +76,7 @@
             android:textColor="@color/white"
             android:textColorHint="@color/text_hint" />
 
-        <!-- Кнопка сохранения -->
+        <!-- сохранить -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSaveProfile"
             android:layout_width="match_parent"
@@ -89,7 +89,7 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <!-- Кнопка Отменить (Выход) -->
+        <!-- отменить -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCancelProfile"
             android:layout_width="150dp"

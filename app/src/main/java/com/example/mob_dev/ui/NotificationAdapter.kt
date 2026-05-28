@@ -14,7 +14,7 @@ import com.example.mob_dev.data.AppNotification
 
 class NotificationAdapter(
     private var list: List<AppNotification>,
-    private val onDeleteClick: (String, Int) -> Unit // Клик для удаления (ID, позиция в списке)
+    private val onDeleteClick: (String, Int) -> Unit
 ) : RecyclerView.Adapter<NotificationAdapter.NotifViewHolder>() {
 
     class NotifViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -32,7 +32,7 @@ class NotificationAdapter(
         val item = list[position]
         holder.tvTitle.text = item.title
 
-        // ДИНАМИЧЕСКИ НАСТРАИВАЕМ ИКОНКИ И ЦВЕТА
+
         when (item.type) {
             "reminder" -> {
                 holder.ivIcon.visibility = View.VISIBLE
@@ -41,7 +41,7 @@ class NotificationAdapter(
                 holder.ivIcon.setColorFilter(Color.WHITE)
             }
             "warning" -> {
-                // Для предупреждения прячем обычную иконку и показываем оранжевый восклицательный знак
+
                 holder.ivIcon.visibility = View.GONE
                 holder.blockWarning.visibility = View.VISIBLE
             }
@@ -49,12 +49,12 @@ class NotificationAdapter(
                 holder.ivIcon.visibility = View.VISIBLE
                 holder.blockWarning.visibility = View.GONE
                 holder.ivIcon.setImageResource(android.graphics.drawable.Icon.createWithResource(holder.itemView.context, android.R.drawable.ic_menu_agenda).resId)
-                // Зеленый цвет для подарка/промо
+
                 holder.ivIcon.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.accent_green))
             }
         }
 
-        // Клик по всей карточке удаляет её (помечает прочитанной)
+
         holder.itemView.setOnClickListener {
             onDeleteClick(item.id, position)
         }

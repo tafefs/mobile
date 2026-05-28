@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:background="@color/app_background">
 
-    <!-- КОНТЕЙНЕР ДЛЯ ФРАГМЕНТОВ (Сюда будут загружаться Home и Profile) -->
+    <!-- контейнер для фрагментов -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation_main" />
 
-    <!-- НИЖНЯЯ НАВИГАЦИЯ (Остается на месте) -->
+    <!-- нижняя навигация -->
     <LinearLayout
         android:id="@+id/bottom_navigation_main"
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:orientation="horizontal"
         android:weightSum="5">
 
-        <!-- 1. HOME -->
+        <!-- хоум -->
         <LinearLayout
             android:id="@+id/btnNavHome"
             android:layout_width="0dp"
@@ -45,7 +45,7 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- 2. TRACKING -->
+        <!-- трэкинг -->
         <LinearLayout
             android:id="@+id/btnNavTracking"
             android:layout_width="0dp"
@@ -67,7 +67,7 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- 3. SCHEDULE -->
+        <!-- расписание -->
         <LinearLayout
             android:id="@+id/btnNavSchedule"
             android:layout_width="0dp"
@@ -89,7 +89,7 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- 4. NOTIFICATIONS -->
+        <!-- уведомления -->
         <LinearLayout
             android:id="@+id/btnNavNotifications"
             android:layout_width="0dp"
@@ -111,7 +111,7 @@
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- 5. PROFILE -->
+        <!-- профиль -->
         <LinearLayout
             android:id="@+id/btnNavProfile"
             android:layout_width="0dp"

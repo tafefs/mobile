@@ -52,13 +52,11 @@ class MapFragment : Fragment(), UserLocationObjectListener {
         val btnBack = view.findViewById<TextView>(R.id.btnBackFromMap)
         val btnMyLocation = view.findViewById<FloatingActionButton>(R.id.btnMyLocation)
 
-        // 1. Кнопка НАЗАД
         btnBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        // 2. СТАВИМ МЕТКУ КЛУБА (С конвертацией XML в Bitmap)
-        val fitnessClubPoint = Point(53.397213, 58.984059) // Координаты клуба
+        val fitnessClubPoint = Point(53.397213, 58.984059)
 
         val clubBitmap = getBitmapFromVectorDrawable(requireContext(), R.drawable.ic_pin_club)
         if (clubBitmap != null) {
@@ -68,10 +66,9 @@ class MapFragment : Fragment(), UserLocationObjectListener {
 
         moveToPosition(fitnessClubPoint)
 
-        // 3. Запрос геолокации
+        // запрос гео
         locationPermissionRequest.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
 
-        // 4. КНОПКА "ГДЕ Я"
         btnMyLocation.setOnClickListener {
             if (::userLocationLayer.isInitialized && userLocationLayer.cameraPosition() != null) {
                 val userPoint = userLocationLayer.cameraPosition()!!.target
@@ -98,25 +95,21 @@ class MapFragment : Fragment(), UserLocationObjectListener {
         userLocationLayer.setObjectListener(this)
     }
 
-    // --- ИЗМЕНЕНИЕ ИКОНКИ ВАШЕГО МЕСТОПОЛОЖЕНИЯ ---
+
     override fun onObjectAdded(userLocationView: UserLocationView) {
-        // Меняем цвет радиуса (полупрозрачный зеленый)
         userLocationView.accuracyCircle.fillColor = android.graphics.Color.parseColor("#4466FF89")
 
-        // Меняем саму иконку на вашу кастомную
         val userBitmap = getBitmapFromVectorDrawable(requireContext(), R.drawable.ic_user_location) // Убедитесь, что этот файл есть
         if (userBitmap != null) {
             val userIcon = ImageProvider.fromBitmap(userBitmap)
-            userLocationView.pin.setIcon(userIcon)    // Иконка когда вы стоите
-            userLocationView.arrow.setIcon(userIcon)  // Иконка когда вы идете
+            userLocationView.pin.setIcon(userIcon)
+            userLocationView.arrow.setIcon(userIcon)
         }
     }
 
     override fun onObjectRemoved(view: UserLocationView) {}
     override fun onObjectUpdated(view: UserLocationView, event: ObjectEvent) {}
 
-    // --- ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ДЛЯ КОНВЕРТАЦИИ ВЕКТОРОВ ---
-    // Яндекс карты не понимают .xml файлы, эта функция рисует их в растровую картинку
     private fun getBitmapFromVectorDrawable(context: Context, drawableId: Int): Bitmap? {
         val drawable = ContextCompat.getDrawable(context, drawableId) ?: return null
         val bitmap = Bitmap.createBitmap(
@@ -130,7 +123,6 @@ class MapFragment : Fragment(), UserLocationObjectListener {
         return bitmap
     }
 
-    // --- ЖИЗНЕННЫЙ ЦИКЛ ---
     override fun onStart() {
         super.onStart()
         MapKitFactory.getInstance().onStart()

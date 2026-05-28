@@ -1,2 +1,2 @@
-package com.example.mob_dev // ВАШ ПАКЕТ
+package com.example.mob_dev
 

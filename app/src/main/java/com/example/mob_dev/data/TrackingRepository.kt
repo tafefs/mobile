@@ -20,7 +20,6 @@ class TrackingRepository {
                 order("recorded_at", Order.ASCENDING)
             }.decodeList<WeightEntry>()
         } catch (e: Exception) {
-            // ИСПРАВЛЕНИЕ: Если корутина отменена - не пишем это в логи как ошибку!
             if (e is kotlinx.coroutines.CancellationException) throw e
 
             Log.e("TrackingError", "Ошибка загрузки истории веса: ${e.message}", e)
@@ -33,7 +32,7 @@ class TrackingRepository {
             val profile = dbProfile.select().decodeSingleOrNull<UserProfile>()
             profile?.height ?: 175
         } catch (e: Exception) {
-            if (e is kotlinx.coroutines.CancellationException) throw e // ИСПРАВЛЕНИЕ
+            if (e is kotlinx.coroutines.CancellationException) throw e
 
             Log.e("TrackingError", "Ошибка загрузки роста: ${e.message}", e)
             175
@@ -46,12 +45,10 @@ class TrackingRepository {
 
             Log.d("TrackingError", "Начинаем сохранение. Вес: $weight, Рост: $height")
 
-            // 1. Записываем вес в историю
+            // заапись веса в историю
             dbHistory.insert(WeightEntry(weight = weight, recorded_at = LocalDate.now().toString()))
             Log.d("TrackingError", "Вес успешно записан в историю")
 
-            // 2. ИСПРАВЛЕНИЕ: Обновляем ТОЛЬКО рост через Map.
-            // Это защитит ваши Имя/Фамилию от зануления!
             dbProfile.update(mapOf("height" to height)) {
                 filter { eq("id", userId) }
             }
@@ -59,7 +56,6 @@ class TrackingRepository {
 
             true
         } catch (e: Exception) {
-            // ЕСЛИ ЧТО-ТО ПОЙДЕТ НЕ ТАК, ВЫ УВИДИТЕ КРАСНЫЙ ТЕКСТ ОШИБКИ В LOGCAT С ТЭГОМ TrackingError
             Log.e("TrackingError", "ОШИБКА СОХРАНЕНИЯ: ${e.message}", e)
             false
         }

@@ -2,7 +2,7 @@ package com.example.mob_dev.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView // <-- Исправляет ошибку Unresolved reference 'TextView'
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.mob_dev.ui.MainActivity
@@ -26,12 +26,12 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launch {
             delay(2000)
 
-            // Ждем загрузки сессии из памяти
+            // загрузка сессии из памяти
             val status = SupabaseClient.client.auth.sessionStatus.first { it !is SessionStatus.LoadingFromStorage }
 
 
             if (status is SessionStatus.Authenticated) {
-                // ИСПРАВЛЕНИЕ: Пересылаем метку "OPEN_FRAGMENT" дальше в MainActivity
+                // ссылка уведомления в мэйнактивити
                 val nextIntent = Intent(this@SplashActivity, MainActivity::class.java).apply {
                     putExtra("OPEN_FRAGMENT", intent.getStringExtra("OPEN_FRAGMENT"))
                 }

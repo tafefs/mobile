@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Находим кнопки-контейнеры
         val btnHome = findViewById<LinearLayout>(R.id.btnNavHome)
         val btnTracking = findViewById<LinearLayout>(R.id.btnNavTracking)
         val btnSchedule = findViewById<LinearLayout>(R.id.btnNavSchedule)
@@ -38,18 +37,14 @@ class MainActivity : AppCompatActivity() {
         val openFragment = intent.getStringExtra("OPEN_FRAGMENT")
 
         if (openFragment == "notifications") {
-            // Сценарий А: Переход из пуш-уведомления
             loadFragment(NotificationsFragment())
             updateNavUI(NavTab.NOTIFICATIONS)
         } else if (savedInstanceState == null) {
-            // Сценарий Б: Обычный первый запуск приложения
             loadFragment(HomeFragment())
             updateNavUI(NavTab.HOME)
         }
 
-        // ВТОРОЙ ДУБЛИРУЮЩИЙ БЛОК УДАЛЕН ОТСЮДА!
 
-        // ОБРАБОТКА КЛИКОВ НИЖНЕГО МЕНЮ
         btnHome.setOnClickListener {
             loadFragment(HomeFragment())
             updateNavUI(NavTab.HOME)
@@ -76,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // МЕТОД ЗАГРУЗКИ ФРАГМЕНТА
+    // загрузка фрагмента
     fun loadFragment(fragment: Fragment, addToBackStack: Boolean = false) {
         val transaction = supportFragmentManager
             .beginTransaction()
@@ -89,7 +84,6 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    // МЕТОД ОБНОВЛЕНИЯ ИНТЕРФЕЙСА МЕНЮ
     private fun updateNavUI(activeTab: NavTab) {
         val colorActive = ContextCompat.getColor(this, R.color.accent_green)
         val colorInactive = ContextCompat.getColor(this, R.color.text_hint)

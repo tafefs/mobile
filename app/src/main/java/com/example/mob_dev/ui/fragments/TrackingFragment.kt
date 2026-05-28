@@ -77,7 +77,6 @@ class TrackingFragment : Fragment() {
             override fun onNothingSelected() {}
         })
 
-        // ИСПРАВЛЕНИЕ: updateTabUI вызывается МГНОВЕННО при клике, до запроса в сеть!
         tabWeek.setOnClickListener {
             currentDaysPeriod = 7
             updateTabUI(tabWeek)
@@ -146,7 +145,6 @@ class TrackingFragment : Fragment() {
                 setupChart(entries, datesList)
 
             } catch (e: Exception) {
-                // ИСПРАВЛЕНИЕ: Игнорируем ошибку отмены корутины в логах
                 if (e is kotlinx.coroutines.CancellationException) throw e
 
                 android.util.Log.e("TrackingError", "Ошибка при обновлении графика: ${e.message}")

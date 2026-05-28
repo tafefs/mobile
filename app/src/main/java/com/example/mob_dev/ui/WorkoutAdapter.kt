@@ -12,8 +12,8 @@ import com.example.mob_dev.data.Workout
 
 class WorkoutAdapter(
     private var workouts: List<Workout>,
-    private var bookedIds: List<String>, // Список ID, на которые мы уже записаны
-    private val onBookClick: (String, Boolean) -> Unit // Лямбда для обработки клика (ID, сейчасЗаписанЛи)
+    private var bookedIds: List<String>, // на которые записаны
+    private val onBookClick: (String, Boolean) -> Unit // записан ли
 ) : RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>() {
 
     class WorkoutViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,7 +34,6 @@ class WorkoutAdapter(
         holder.tvTitle.text = workout.title
         holder.tvTime.text = "${workout.time} • ${workout.type}"
 
-        // Настраиваем внешний вид кнопки
         if (!workout.has_spots && !isBooked) {
             holder.btnBook.text = "Нет мест"
             holder.btnBook.setBackgroundResource(R.drawable.bg_btn_orange)
@@ -49,7 +48,6 @@ class WorkoutAdapter(
             holder.btnBook.isEnabled = true
         }
 
-        // Обработка клика
         holder.btnBook.setOnClickListener {
             onBookClick(workout.id, isBooked)
         }
@@ -57,7 +55,7 @@ class WorkoutAdapter(
 
     override fun getItemCount() = workouts.size
 
-    // Метод для обновления списка при фильтрации
+
     fun updateData(newWorkouts: List<Workout>, newBookedIds: List<String>) {
         workouts = newWorkouts
         bookedIds = newBookedIds

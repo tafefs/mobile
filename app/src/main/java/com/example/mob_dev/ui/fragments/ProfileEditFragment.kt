@@ -34,7 +34,6 @@ class ProfileEditFragment : Fragment() {
             ivAvatar.load(uri) {
                 transformations(CircleCropTransformation())
             }
-            // Сжимаем фото перед отправкой
             selectedImageBytes = compressImage(uri)
         }
     }
@@ -62,15 +61,14 @@ class ProfileEditFragment : Fragment() {
         etEmail.isEnabled = false
         etEmail.alpha = 0.5f
 
-        // --- ПОДКЛЮЧАЕМ МАСКИ ВВОДА ---
-        setupDateMask(etDob)   // Маска даты
-        setupPhoneMask(etPhone) // Маска телефона
+        setupDateMask(etDob)
+        setupPhoneMask(etPhone)
 
         ivAvatar.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        // Подгружаем данные
+        // загрузка данных
         lifecycleScope.launch {
             val profile = profileRepository.getProfile()
             if (profile != null) {
@@ -101,7 +99,6 @@ class ProfileEditFragment : Fragment() {
             val newDob = etDob.text.toString().trim()
             val newPhone = etPhone.text.toString().trim()
 
-            // Простая валидация перед сохранением
             if (newDob.isNotEmpty() && newDob.length != 10) {
                 Toast.makeText(requireContext(), "Введите корректную дату", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -147,11 +144,8 @@ class ProfileEditFragment : Fragment() {
         }
     }
 
-    // ==========================================
-    // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (МАСКИ И СЖАТИЕ)
-    // ==========================================
 
-    // 1. МАСКА ДАТЫ РОЖДЕНИЯ (ДД.ММ.ГГГГ)
+
     private fun setupDateMask(etDob: EditText) {
         etDob.addTextChangedListener(object : TextWatcher {
             private var current = ""
@@ -197,7 +191,6 @@ class ProfileEditFragment : Fragment() {
         })
     }
 
-    // 2. УМНАЯ МАСКА ТЕЛЕФОНА (+7 (XXX) XXX-XX-XX)
     private fun setupPhoneMask(etPhone: EditText) {
         etPhone.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
@@ -209,7 +202,6 @@ class ProfileEditFragment : Fragment() {
                     return
                 }
 
-                // Стираем всё кроме цифр
                 var clean = s.toString().replace("[^\\d]".toRegex(), "")
 
                 if (clean.isEmpty()) {
@@ -218,12 +210,10 @@ class ProfileEditFragment : Fragment() {
                     return
                 }
 
-                // Если пользователь случайно начал вводить 7 или 8 в начале, отрезаем её
                 if (clean.startsWith("7") || clean.startsWith("8")) {
                     clean = clean.substring(1)
                 }
 
-                // Собираем маску по кусочкам
                 val formatted = StringBuilder("+7 ")
                 if (clean.isNotEmpty()) {
                     formatted.append("(")
@@ -248,13 +238,11 @@ class ProfileEditFragment : Fragment() {
 
                 isUpdating = true
                 etPhone.setText(formatted.toString())
-                etPhone.setSelection(etPhone.text.length) // Курсор всегда в конец
+                etPhone.setSelection(etPhone.text.length)
             }
             override fun afterTextChanged(s: Editable?) {}
         })
     }
-
-    // 3. СЖАТИЕ КАРТИНКИ
     private fun compressImage(uri: android.net.Uri): ByteArray? {
         return try {
             val inputStream = requireContext().contentResolver.openInputStream(uri) ?: return null

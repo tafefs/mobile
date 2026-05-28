@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_background">
 
-    <!-- 1. КРУТИЛКА ЗАГРУЗКИ -->
+    <!-- загрузка -->
     <ProgressBar
         android:id="@+id/progressBarNotifications"
         android:layout_width="wrap_content"
@@ -13,7 +13,6 @@
         android:layout_gravity="center"
         android:indeterminateTint="@color/accent_green" />
 
-    <!-- 2. СКРОЛЛИРУЕМЫЙ КОНТЕНТ (Теперь внутри только ОДИН LinearLayout) -->
     <ScrollView
         android:id="@+id/mainNotificationsContent"
         android:layout_width="match_parent"
@@ -37,7 +36,7 @@
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
-            <!-- НАШ СПИСОК УВЕДОМЛЕНИЙ -->
+            <!-- список уведомлений -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvNotifications"
                 android:layout_width="match_parent"
@@ -47,7 +46,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- 3. КНОПКА ДОБАВЛЕНИЯ (Теперь она лежит снаружи ScrollView и "летает" поверх него) -->
+    <!-- добавить -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAddNotification"
         android:layout_width="wrap_content"

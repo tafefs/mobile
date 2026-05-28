@@ -23,21 +23,21 @@ class ScheduleFragment : Fragment() {
 
     private val bookingRepo = BookingRepository()
 
-    // UI
+    // интерфейс
     private lateinit var rvWorkouts: RecyclerView
     private lateinit var tvTotalBookings: TextView
     private lateinit var adapter: WorkoutAdapter
 
-    // Данные
+    // данные
     private var allWorkouts: List<Workout> = emptyList()
     private var myBookedIds: MutableList<String> = mutableListOf()
 
-    // Состояние фильтров (По умолчанию: ПН и Все)
+    // начальные состояния
     private var selectedDay = "ПН"
     private var selectedType = "Все"
-    private var onlyWithSpots = false // Чекбокс "Есть места"
+    private var onlyWithSpots = false
 
-    // Списки кнопок фильтров
+    // списки кнопок фильтров
     private lateinit var dayTabs: List<TextView>
     private lateinit var typeTabs: List<TextView>
 
@@ -50,17 +50,16 @@ class ScheduleFragment : Fragment() {
 
         tvTotalBookings = view.findViewById(R.id.tvTotalBookings)
         rvWorkouts = view.findViewById(R.id.rvWorkouts)
-        val cbHasSpots = view.findViewById<CheckBox>(R.id.cbHasSpots) // Убедитесь, что чекбокс имеет этот ID в XML
+        val cbHasSpots = view.findViewById<CheckBox>(R.id.cbHasSpots)
 
-        // 1. ИНИЦИАЛИЗАЦИЯ СПИСКА
+        // инициализация списка
         rvWorkouts.layoutManager = LinearLayoutManager(requireContext())
         adapter = WorkoutAdapter(emptyList(), emptyList()) { workoutId, isBooked ->
             handleBookingClick(workoutId, isBooked)
         }
         rvWorkouts.adapter = adapter
 
-        // 2. ИНИЦИАЛИЗАЦИЯ ФИЛЬТРОВ
-        // (Обязательно добавьте эти ID в fragment_schedule.xml)
+        // инициализация фильтров
         typeTabs = listOf(
             view.findViewById(R.id.tabAll),
             view.findViewById(R.id.tabGroup),
@@ -75,7 +74,6 @@ class ScheduleFragment : Fragment() {
 
         setupFilters(cbHasSpots)
 
-        // 3. ЗАГРУЗКА ДАННЫХ ИЗ БАЗЫ
         loadDataFromServer()
     }
 
@@ -86,29 +84,24 @@ class ScheduleFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            // 1. Скачиваем ВСЕ тренировки
+            // загрущка всех тренировок
             allWorkouts = bookingRepo.getWorkouts()
 
-            // 2. ИСПРАВЛЕНИЕ: Скачиваем список ID, на которые мы реально записаны в БД
+            // тренировки на которые записан
             val bookedIdsFromDb = bookingRepo.getMyBookedWorkoutIds()
             myBookedIds = bookedIdsFromDb.toMutableList() // Обновляем локальный список
 
-            // 3. Обновляем текст
             tvTotalBookings.text = "Запланировано: ${myBookedIds.size}"
 
-            // 4. Применяем фильтры (это обновит адаптер)
             applyFilters()
         }
     }
 
-    // --- ЛОГИКА ФИЛЬТРАЦИИ ---
     private fun setupFilters(cbHasSpots: CheckBox) {
-        // Клик по типу
         typeTabs[0].setOnClickListener { selectedType = "Все"; updateTabUI(typeTabs, it as TextView); applyFilters() }
         typeTabs[1].setOnClickListener { selectedType = "Групповые"; updateTabUI(typeTabs, it as TextView); applyFilters() }
         typeTabs[2].setOnClickListener { selectedType = "Персональные"; updateTabUI(typeTabs, it as TextView); applyFilters() }
 
-        // Клик по дню
         dayTabs[0].setOnClickListener { selectedDay = "ПН"; updateTabUI(dayTabs, it as TextView, true); applyFilters() }
         dayTabs[1].setOnClickListener { selectedDay = "ВТ"; updateTabUI(dayTabs, it as TextView, true); applyFilters() }
         dayTabs[2].setOnClickListener { selectedDay = "СР"; updateTabUI(dayTabs, it as TextView, true); applyFilters() }
@@ -117,7 +110,7 @@ class ScheduleFragment : Fragment() {
         dayTabs[5].setOnClickListener { selectedDay = "СБ"; updateTabUI(dayTabs, it as TextView, true); applyFilters() }
         dayTabs[6].setOnClickListener { selectedDay = "ВС"; updateTabUI(dayTabs, it as TextView, true); applyFilters() }
 
-        // Чекбокс
+
         cbHasSpots.setOnCheckedChangeListener { _, isChecked ->
             onlyWithSpots = isChecked
             applyFilters()
@@ -136,30 +129,29 @@ class ScheduleFragment : Fragment() {
         adapter.updateData(filteredList, myBookedIds)
     }
 
-    // --- ЛОГИКА ЗАПИСИ (КОРЗИНА) ---
+    // запись
     private fun handleBookingClick(workoutId: String, isBooked: Boolean) {
         lifecycleScope.launch {
             if (isBooked) {
-                // Отмена
+                // отмена
                 if (bookingRepo.cancelWorkout(workoutId)) {
                     myBookedIds.remove(workoutId)
                     Toast.makeText(requireContext(), "Запись отменена", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                // Запись
+                // запись
                 if (bookingRepo.bookWorkout(workoutId)) {
                     myBookedIds.add(workoutId)
                     Toast.makeText(requireContext(), "Вы записаны!", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            // Пересчитываем Итого и обновляем список
-            tvTotalBookings.text = "Запланировано: ${myBookedIds.size}" // Временно считаем локально
+            // счет записанных
+            tvTotalBookings.text = "Запланировано: ${myBookedIds.size}"
             applyFilters()
         }
     }
 
-    // --- ВИЗУАЛ ФИЛЬТРОВ ---
     private fun updateTabUI(tabs: List<TextView>, activeTab: TextView, isDayTab: Boolean = false) {
         for (tab in tabs) {
             tab.setBackgroundResource(R.drawable.bg_filter_inactive)

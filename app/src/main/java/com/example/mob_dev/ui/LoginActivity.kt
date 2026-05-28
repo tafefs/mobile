@@ -14,20 +14,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.mob_dev.ui.MainActivity
 import com.example.mob_dev.R
-import com.example.mob_dev.data.AuthRepository // Импорт вашего репозитория
+import com.example.mob_dev.data.AuthRepository
 import com.example.mob_dev.utils.NetworkUtils
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
     private var isPasswordVisible = false
-    private val authRepository = AuthRepository() // Инициализация слоя данных
+    private val authRepository = AuthRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Инициализация UI элементов
+
         val etEmail = findViewById<EditText>(R.id.etEmailLogin)
         val etPassword = findViewById<EditText>(R.id.etPasswordLogin)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
@@ -37,25 +37,23 @@ class LoginActivity : AppCompatActivity() {
         val tvEmailError = findViewById<TextView>(R.id.tvEmailError)
         val tvPasswordError = findViewById<TextView>(R.id.tvPasswordError)
 
-        // 1. Логика "Глазика"
+
         ivToggle.setOnClickListener {
             togglePasswordVisibility(etPassword, ivToggle)
         }
 
-        // 2. Логика Входа
+
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            // Проверяем локально (Валидация)
+            // валидация
             val isEmailValid = validateEmail(email, etEmail, tvEmailError)
             val isPassValid = validatePassword(password, etPassword, tvPasswordError)
 
-            // Если всё верно - обращаемся к Репозиторию
             if (isEmailValid && isPassValid) {
 
                 if (!NetworkUtils.isInternetAvailable(this)) {
-                    // Если интернета нет - показываем ошибку и останавливаем выполнение (return)
                     Toast.makeText(this, "Нет подключения к интернету", Toast.LENGTH_LONG).show()
                     return@setOnClickListener
                 }
@@ -67,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this@LoginActivity, "Вход выполнен!", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-                        finish() // Раскомментировал, чтобы нельзя было вернуться назад кнопкой "Back"
+                        finish()
                     } else {
                         Toast.makeText(this@LoginActivity, "Неверный Email или Пароль", Toast.LENGTH_SHORT).show()
                         etEmail.setBackgroundResource(R.drawable.bg_input_error)
@@ -77,7 +75,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        // 3. Переходы на другие экраны
         tvRegister.setOnClickListener {
             startActivity(Intent(this, RegistrationActivity::class.java))
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
@@ -89,7 +86,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (СОБЛЮДЕНИЕ SOLID) ---
 
     private fun togglePasswordVisibility(etPassword: EditText, ivToggle: ImageView) {
         isPasswordVisible = !isPasswordVisible

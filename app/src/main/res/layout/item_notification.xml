@@ -15,7 +15,7 @@
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <!-- 1. ИКОНКА (Колокольчик или Подарок) -->
+        <!-- иконка -->
         <ImageView
             android:id="@+id/ivNotifIcon"
             android:layout_width="32dp"
@@ -23,7 +23,6 @@
             android:src="@android:drawable/ic_popup_reminder"
             android:visibility="visible" />
 
-        <!-- 2. ИКОНКА ВОСКЛИЦАТЕЛЬНОГО ЗНАКА (Для предупреждений) -->
         <FrameLayout
             android:id="@+id/blockWarningIcon"
             android:layout_width="32dp"
@@ -40,7 +39,7 @@
                 android:textStyle="bold" />
         </FrameLayout>
 
-        <!-- ТЕКСТ УВЕДОМЛЕНИЯ -->
+        <!-- текст -->
         <TextView
             android:id="@+id/tvNotifTitle"
             android:layout_width="0dp"
@@ -51,7 +50,7 @@
             android:textColor="@color/white"
             android:textSize="14sp" />
 
-        <!-- МАЛЕНЬКИЙ КРЕСТИК ДЛЯ УДАЛЕНИЯ -->
+        <!-- крестик -->
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"

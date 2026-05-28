@@ -24,7 +24,7 @@ class TrackingEditFragment : Fragment() {
     private val trackingRepo = TrackingRepository()
     private var currentHeight: Int = 175
     private var currentWeight: Float = 60.0f
-    // ПЕРЕМЕННЫЕ ДЛЯ КОНТРОЛЯ КОРУТИН
+    // для контоля коррутин
     private var loadJob: Job? = null
     private var saveJob: Job? = null
 
@@ -55,7 +55,7 @@ class TrackingEditFragment : Fragment() {
         progressBar.visibility = View.VISIBLE
         mainContent.visibility = View.GONE
 
-        // ПОДГРУЖАЕМ РЕАЛЬНЫЕ ДАННЫЕ ИЗ БАЗЫ
+        // загрузка данных
         loadJob = lifecycleScope.launch {
             val history = trackingRepo.getWeightHistory(1)
             if (history.isNotEmpty()) {
@@ -68,7 +68,6 @@ class TrackingEditFragment : Fragment() {
             mainContent.visibility = View.VISIBLE
         }
 
-        // --- ЛОГИКА ИЗМЕНЕНИЯ РОСТА ---
         btnPlusHeight.setOnClickListener {
             if (currentHeight < 250) currentHeight += 1
             updateDisplay(tvHeight, tvWeight)
@@ -78,8 +77,7 @@ class TrackingEditFragment : Fragment() {
             updateDisplay(tvHeight, tvWeight)
         }
 
-        // --- ЛОГИКА ИЗМЕНЕНИЯ ВЕСА ---
-        // Важно: так как мы используем Float (числа с точкой f), прибавлять нужно тоже f
+
         btnPlusWeight.setOnClickListener {
             if (currentWeight < 300.0f) currentWeight += 0.5f
             updateDisplay(tvHeight, tvWeight)
@@ -89,14 +87,12 @@ class TrackingEditFragment : Fragment() {
             updateDisplay(tvHeight, tvWeight)
         }
 
-        // --- КНОПКА СОХРАНИТЬ (ОТПРАВКА В БАЗУ) ---
         btnSave.setOnClickListener {
             if (!NetworkUtils.isInternetAvailable(requireContext())) {
                 Toast.makeText(requireContext(), "Нет интернета", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Отменяем предыдущую попытку сохранения, если она зависла
             saveJob?.cancel()
 
             btnSave.isEnabled = false
@@ -116,7 +112,6 @@ class TrackingEditFragment : Fragment() {
             }
         }
 
-        // --- КНОПКА ОТМЕНИТЬ ---
         btnCancel.setOnClickListener {
             (requireActivity() as MainActivity).loadFragment(TrackingFragment(), true)
         }

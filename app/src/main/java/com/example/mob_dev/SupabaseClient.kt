@@ -13,8 +13,8 @@ object SupabaseClient {
         supabaseKey = SUPABASE_KEY
     ) {
         install(Auth) {
-            autoSaveToStorage = true // Это разрешает сохранение в SharedPreferences
-            alwaysAutoRefresh = true // Автоматически обновляет токен, если он просрочен
+            autoSaveToStorage = true // разрешает сохранение в SharedPreferences
+            alwaysAutoRefresh = true // автоматически обновляет токен если он просрочен
         }
         install(Postgrest)
         install(Storage)

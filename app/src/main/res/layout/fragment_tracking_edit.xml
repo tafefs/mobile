@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_background">
 
-    <!-- КРУТИЛКА ЗАГРУЗКИ -->
+    <!-- загрузка -->
     <ProgressBar
         android:id="@+id/progressBarTrackingEdit"
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- БЛОК РОСТА -->
+        <!-- рост -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                     android:textSize="32sp"
                     android:textStyle="bold" />
 
-                <!-- Кнопки управления -->
+                <!-- управление -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- БЛОК ВЕСА -->
+        <!-- вес -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -156,13 +156,11 @@
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Распорка, чтобы сдвинуть кнопки в самый низ -->
         <Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <!-- КНОПКИ СОХРАНЕНИЯ И ОТМЕНЫ -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSaveTracking"
             android:layout_width="match_parent"

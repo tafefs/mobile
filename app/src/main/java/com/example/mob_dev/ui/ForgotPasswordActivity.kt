@@ -23,40 +23,38 @@ import com.example.mob_dev.R
 import com.example.mob_dev.SupabaseClient
 import com.example.mob_dev.utils.NetworkUtils
 import io.github.jan.supabase.gotrue.auth
-import io.github.jan.supabase.gotrue.providers.builtin.Email // Используем встроенный провайдер Email
+import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.gotrue.OtpType
 import kotlinx.coroutines.launch
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
     private val CHANNEL_ID = "auth_notifications"
-    private var savedEmail = "" // Запомним email, чтобы потом проверить код
+    private var savedEmail = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
 
-// UI Элементы
+
         val blockEmail = findViewById<LinearLayout>(R.id.blockEmailInput)
         val blockCode = findViewById<LinearLayout>(R.id.blockCodeInput)
-        val blockNewPassword = findViewById<LinearLayout>(R.id.blockNewPasswordInput) // НОВЫЙ БЛОК
+        val blockNewPassword = findViewById<LinearLayout>(R.id.blockNewPasswordInput)
 
         val etEmail = findViewById<EditText>(R.id.etEmailForgot)
         val etCode = findViewById<EditText>(R.id.etCodeForgot)
-        val etNewPassword = findViewById<EditText>(R.id.etNewPassword) // НОВОЕ ПОЛЕ
+        val etNewPassword = findViewById<EditText>(R.id.etNewPassword)
 
         val btnSend = findViewById<Button>(R.id.btnSendCode)
         val btnVerify = findViewById<Button>(R.id.btnVerifyCode)
         val btnBack = findViewById<Button>(R.id.btnBackFromForgot)
-        val btnSavePassword = findViewById<Button>(R.id.btnSaveNewPassword) // НОВАЯ КНОПКА
+        val btnSavePassword = findViewById<Button>(R.id.btnSaveNewPassword)
 
         val tvTitle = findViewById<TextView>(R.id.tvTitleForgot)
         val tvSubtitle = findViewById<TextView>(R.id.tvSubtitleForgot)
 
-        // 1. Создаем канал для уведомлений (Обязательно для Android 8+)
         createNotificationChannel()
 
-        // 2. ОТПРАВКА КОДА (OTP) НА ПОЧТУ
         btnSend.setOnClickListener {
             val email = etEmail.text.toString().trim()
 
@@ -65,7 +63,6 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
                 lifecycleScope.launch {
                     try {
-                        // ИСПОЛЬЗУЕМ СПЕЦИАЛЬНЫЙ МЕТОД ДЛЯ СБРОСА ПАРОЛЯ
                         SupabaseClient.client.auth.resetPasswordForEmail(email)
 
                         savedEmail = email
@@ -86,28 +83,24 @@ class ForgotPasswordActivity : AppCompatActivity() {
             }
         }
 
-        // 3. ПРОВЕРКА КОДА (ВХОД В ПРИЛОЖЕНИЕ)
         btnVerify.setOnClickListener {
             val code = etCode.text.toString().trim()
 
             if (code.length == 8) {
 
                 if (!NetworkUtils.isInternetAvailable(this)) {
-                    // Если интернета нет - показываем ошибку и останавливаем выполнение (return)
                     Toast.makeText(this, "Нет подключения к интернету", Toast.LENGTH_LONG).show()
                     return@setOnClickListener
                 }
                 btnVerify.isEnabled = false
                 lifecycleScope.launch {
                     try {
-                        // Верифицируем код восстановления
                         SupabaseClient.client.auth.verifyEmailOtp(
                             type = OtpType.Email.RECOVERY,
                             email = savedEmail,
                             token = code
                         )
 
-                        // ЕСЛИ КОД ВЕРНЫЙ - ПЕРЕХОДИМ К ШАГУ СМЕНЫ ПАРОЛЯ
                         Toast.makeText(this@ForgotPasswordActivity, "Код принят!", Toast.LENGTH_SHORT).show()
 
                         blockCode.visibility = View.GONE
@@ -134,17 +127,14 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
                 lifecycleScope.launch {
                     try {
-                        // Эта команда обновит пароль текущего авторизованного пользователя
                         SupabaseClient.client.auth.updateUser {
                             password = newPass
                         }
 
                         Toast.makeText(this@ForgotPasswordActivity, "Пароль успешно изменен!", Toast.LENGTH_LONG).show()
 
-                        // Для безопасности выходим из временной сессии
                         SupabaseClient.client.auth.signOut()
 
-                        // Отправляем пользователя на экран Логина, чтобы он вошел с НОВЫМ паролем
                         val intent = Intent(this@ForgotPasswordActivity, LoginActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
@@ -162,11 +152,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         btnBack.setOnClickListener { finish() }
     }
 
-    // ==========================================
-    // ЛОГИКА ANDROID PUSH-УВЕДОМЛЕНИЙ
-    // ==========================================
 
-    // Создание канала уведомлений (требование ОС Android)
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "Уведомления авторизации"
@@ -181,9 +167,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         }
     }
 
-    // Вызов самого уведомления
     private fun showNotification(title: String, text: String) {
-        // Проверка разрешения для Android 13+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
@@ -192,7 +176,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         }
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher) // Иконка вашего приложения
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(title)
             .setContentText(text)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

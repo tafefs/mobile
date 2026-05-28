@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NewNotification(
     val title: String,
-    val type: String // 'reminder', 'warning', 'promo'
+    val type: String
 )

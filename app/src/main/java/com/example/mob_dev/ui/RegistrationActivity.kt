@@ -14,7 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.mob_dev.R
-import com.example.mob_dev.data.AuthRepository // Импорт Репозитория
+import com.example.mob_dev.data.AuthRepository
 import com.example.mob_dev.utils.NetworkUtils
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -22,7 +22,7 @@ import java.util.Calendar
 class RegistrationActivity : AppCompatActivity() {
 
     private var isPasswordVisible = false
-    private val authRepository = AuthRepository() // Инициализация слоя данных
+    private val authRepository = AuthRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,31 +39,30 @@ class RegistrationActivity : AppCompatActivity() {
         val tvEmailError = findViewById<TextView>(R.id.tvEmailErrorReg)
         val tvPasswordError = findViewById<TextView>(R.id.tvPasswordErrorReg)
 
-        // 1. ЛОГИКА МАСКИ ДЛЯ ДАТЫ (ДД.ММ.ГГГГ)
         setupDateMask(etDob)
 
-        // 2. ЛОГИКА "ГЛАЗИКА"
+
         ivToggle.setOnClickListener {
             togglePasswordVisibility(etPassword, ivToggle)
         }
 
-        // 3. ЛОГИКА РЕГИСТРАЦИИ (КЛИК)
+
         btnRegister.setOnClickListener {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
             val name = etName.text.toString().trim()
             val surname = etSurname.text.toString().trim()
 
-            // Вызываем функции валидации (принцип SRP)
+
             val isEmailValid = validateEmail(email, etEmail, tvEmailError)
             val isPassValid = validatePassword(password, etPassword, tvPasswordError)
             val isDateValid = validateDate(etDob.text.toString())
 
-            // Если все проверки пройдены - стучимся в Репозиторий
+
             if (isEmailValid && isPassValid && isDateValid) {
 
                 if (!NetworkUtils.isInternetAvailable(this)) {
-                    // Если интернета нет - показываем ошибку и останавливаем выполнение (return)
+
                     Toast.makeText(this, "Нет подключения к интернету", Toast.LENGTH_LONG).show()
                     return@setOnClickListener
                 }
@@ -73,7 +72,7 @@ class RegistrationActivity : AppCompatActivity() {
 
                     if (isSuccess) {
                         Toast.makeText(this@RegistrationActivity, "Регистрация успешна!", Toast.LENGTH_LONG).show()
-                        finish() // Возврат на логин
+                        finish()
                     } else {
                         Toast.makeText(this@RegistrationActivity, "Ошибка регистрации. Возможно, Email уже занят.", Toast.LENGTH_LONG).show()
                     }
@@ -82,7 +81,6 @@ class RegistrationActivity : AppCompatActivity() {
         }
     }
 
-    // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ (СОБЛЮДЕНИЕ SOLID) ---
 
     private fun setupDateMask(etDob: EditText) {
         etDob.addTextChangedListener(object : TextWatcher {

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_background">
 
-    <!-- КРУТИЛКА ЗАГРУЗКИ (Показывается первой) -->
+    <!-- загрузка -->
     <ProgressBar
         android:id="@+id/progressBarProfile"
         android:layout_width="wrap_content"
@@ -13,7 +13,6 @@
         android:layout_gravity="center"
         android:indeterminateTint="@color/accent_green" />
 
-    <!-- ВАШ КОНТЕНТ (Скрыт по умолчанию: visibility="gone") -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,8 +27,7 @@
             android:padding="24dp"
             android:visibility="gone">
 
-            <!-- ... ВЕСЬ ВАШ СТАРЫЙ ДИЗАЙН ПРОФИЛЯ ... -->
-            <!-- Аватарка -->
+            <!-- ава -->
             <ImageView
                 android:id="@+id/ivAvatarView"
                 android:layout_width="120dp"
@@ -64,7 +62,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <!-- Дата рождения -->
+                <!-- др -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -87,7 +85,7 @@
                         android:textColor="@color/white" />
                 </LinearLayout>
 
-                <!-- Email -->
+                <!-- емайл -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -110,7 +108,7 @@
                         android:textColor="@color/white" />
                 </LinearLayout>
 
-                <!-- Телефон -->
+                <!-- телефон -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

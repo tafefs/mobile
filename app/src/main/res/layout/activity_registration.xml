@@ -44,7 +44,7 @@
             android:hint="Дата рождения"
             android:inputType="date" />
 
-        <!-- EMAIL БЛОК (Отступ 12dp) -->
+        <!-- емайл -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
                 android:visibility="gone" />
         </LinearLayout>
 
-        <!-- ПАРОЛЬ БЛОК (Отступ 32dp перед кнопкой) -->
+        <!-- пароль -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

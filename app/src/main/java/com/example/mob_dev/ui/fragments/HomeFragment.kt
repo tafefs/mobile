@@ -38,7 +38,6 @@ class HomeFragment : Fragment() {
         val ivQrCode = view.findViewById<ImageView>(R.id.ivQrCode)
         val tvNearestWorkout = view.findViewById<TextView>(R.id.tvNearestWorkout)
 
-        // Новые элементы для новостей и мероприятий
         val tvNews1 = view.findViewById<TextView>(R.id.tvNewsTitle1)
         val tvNews2 = view.findViewById<TextView>(R.id.tvNewsTitle2)
         val ivEventImage = view.findViewById<ImageView>(R.id.ivEventImage)
@@ -48,7 +47,6 @@ class HomeFragment : Fragment() {
             (requireActivity() as MainActivity).loadFragment(MapFragment(), true)
         }
 
-        // ЗАПУСКАЕМ ЗАГРУЗКУ
         loadHomeData(ivQrCode, tvNearestWorkout, tvNews1, tvNews2, ivEventImage, tvEventDesc)
     }
 
@@ -62,22 +60,17 @@ class HomeFragment : Fragment() {
     ) {
         lifecycleScope.launch {
             try {
-                // 1. Уникальный QR-код на основе ID пользователя
+                // кр код с айди пользователя
                 val userId = SupabaseClient.client.auth.currentUserOrNull()?.id
                 if (userId != null) {
-                    // Зашиваем в QR-код ссылку на красивый пропуск.
-                    // Мы передаем ID пользователя в параметрах ссылки (как в реальных системах контроля доступа!)
-                    val passUrl = "https://i.postimg.cc/mD8Z8n8g/pass-active.png?user=$userId"
-
-                    // Генерируем QR, который ведет на эту ссылку
-                    val qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$passUrl"
+                    val qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$userId"
 
                     ivQr.load(qrUrl) {
                         crossfade(true)
                     }
                 }
 
-                // 2. ПАРАЛЛЕЛЬНО скачиваем все данные с сервера
+                // скачивание данных
                 val workoutDeferred = async { bookingRepo.getNearestBookedWorkout() }
                 val newsDeferred = async { bookingRepo.getNews() }
                 val eventDeferred = async { bookingRepo.getLatestEvent() }
@@ -86,14 +79,14 @@ class HomeFragment : Fragment() {
                 val newsList = newsDeferred.await()
                 val latestEvent = eventDeferred.await()
 
-                // 3. Отображаем тренировку
+                // отображение тренировки
                 if (nearestWorkout != null) {
                     tvWorkout.text = "Ближайшая тренировка:\n${nearestWorkout.title}\n${nearestWorkout.day_of_week} в ${nearestWorkout.time}"
                 } else {
                     tvWorkout.text = "Нет запланированных\nтренировок"
                 }
 
-                // 4. Отображаем новости
+                // отображение новостей
                 if (newsList.size >= 2) {
                     tvNews1.text = newsList[0].title
                     tvNews2.text = newsList[1].title
@@ -105,14 +98,13 @@ class HomeFragment : Fragment() {
                     tvNews2.text = "Новостей пока нет"
                 }
 
-                // 5. Отображаем мероприятие (Картинка + Описание)
+                // отображение мероприятия
                 if (latestEvent != null) {
                     tvEventText.text = latestEvent.title
 
                     ivEventImg.load(latestEvent.image_url) {
                         crossfade(true)
-                        // Если произойдет ошибка сети, покажется эта иконка (чтобы экран не был пустым)
-                        placeholder(android.R.drawable.ic_menu_rotate) // Крутилка во время загрузки
+                        placeholder(android.R.drawable.ic_menu_rotate)
                     }
                 }
 

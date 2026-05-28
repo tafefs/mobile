@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WeightEntry(
     val weight: Float,
-    val recorded_at: String // Формат "ГГГГ-ММ-ДД"
+    val recorded_at: String
 )

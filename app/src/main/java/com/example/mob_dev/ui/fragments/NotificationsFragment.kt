@@ -40,7 +40,6 @@ class NotificationsFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var mainContent: ScrollView
 
-    // ID канала для системных уведомлений
     private val CHANNEL_ID = "app_internal_notifications"
 
     override fun onCreateView(
@@ -58,7 +57,6 @@ class NotificationsFragment : Fragment() {
         rvNotifications = view.findViewById(R.id.rvNotifications)
         val btnAdd = view.findViewById<FloatingActionButton>(R.id.btnAddNotification)
 
-        // 1. Создаем канал уведомлений при открытии экрана
         createNotificationChannel()
 
         rvNotifications.layoutManager = LinearLayoutManager(requireContext())
@@ -91,7 +89,6 @@ class NotificationsFragment : Fragment() {
         }
     }
 
-    // ДИАЛОГ СОЗДАНИЯ С ОТПРАВКОЙ НАСТОЯЩЕГО ПУША
     private fun showCreateNotificationDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Создать уведомление")
@@ -154,9 +151,7 @@ class NotificationsFragment : Fragment() {
         }
     }
 
-    // ==========================================
-    // ЛОГИКА НАСТОЯЩИХ СИСТЕМНЫХ УВЕДОМЛЕНИЙ
-    // ==========================================
+
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -179,14 +174,11 @@ class NotificationsFragment : Fragment() {
             }
         }
 
-        // 1. Создаем намерение открыть MainActivity
         val intent = Intent(requireContext(), SplashActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("OPEN_FRAGMENT", "notifications") // Передаем метку в Splash
+            putExtra("OPEN_FRAGMENT", "notifications")
         }
 
-        // 2. Упаковываем намерение в PendingIntent (требование Android для клика по уведомлениям)
-        // FLAG_IMMUTABLE обязателен начиная с Android 12 для безопасности
         val pendingIntent = PendingIntent.getActivity(
             requireContext(),
             0,
@@ -199,8 +191,8 @@ class NotificationsFragment : Fragment() {
             .setContentTitle(title)
             .setContentText(text)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent) // <-- НАПРАВЛЯЕМ КЛИК НА НАШ PENDING_INTENT
-            .setAutoCancel(true) // Письмо само удалится из шторки после клика
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(requireContext())) {
             val uniqueId = System.currentTimeMillis().toInt()

@@ -8,12 +8,12 @@ import java.time.LocalTime import java.time.format.DateTimeFormatter
 
 class BookingRepository {
 
-    // Ссылка на нашу таблицу в БД
+    // ссылки на таблицы
     private val db = SupabaseClient.client.postgrest["bookings"]
-    // Внутри класса BookingRepository добавьте:
     private val dbWorkouts = SupabaseClient.client.postgrest["workouts"]
     private val dbNews = SupabaseClient.client.postgrest["news"]
     private val dbEvents = SupabaseClient.client.postgrest["events"]
+    private val dbNotifications = SupabaseClient.client.postgrest["notifications"]
 
     suspend fun getNews(): List<News> {
         return try {
@@ -26,14 +26,13 @@ class BookingRepository {
     suspend fun getLatestEvent(): Event? {
         return try {
             dbEvents.select {
-                limit(1) // Берем только одно мероприятие для главного баннера
+                limit(1)
             }.decodeSingleOrNull<Event>()
         } catch (e: Exception) {
             null
         }
     }
 
-    // Получить все тренировки из базы
     suspend fun getWorkouts(): List<Workout> {
         return try {
             dbWorkouts.select().decodeList<Workout>()
@@ -42,10 +41,9 @@ class BookingRepository {
         }
     }
 
-    // 1. ДОБАВИТЬ В КОРЗИНУ (Записаться)
+    // записаться
     suspend fun bookWorkout(workoutId: String): Boolean {
         return try {
-            // Отправляем JSON { "workout_id": "..." } в таблицу
             db.insert(Booking(workout_id = workoutId))
             true
         } catch (e: Exception) {
@@ -53,11 +51,9 @@ class BookingRepository {
         }
     }
 
-    // 2. УДАЛИТЬ ИЗ КОРЗИНЫ (Отменить запись)
+    // отменить запись
     suspend fun cancelWorkout(workoutId: String): Boolean {
         return try {
-            // Удаляем запись, где workout_id совпадает
-            // (Чужую запись он не удалит благодаря RLS политике в БД)
             db.delete {
                 filter {
                     eq("workout_id", workoutId)
@@ -69,48 +65,16 @@ class BookingRepository {
         }
     }
 
-    // 3. ПРОВЕРКА (Записан ли уже?)
-    suspend fun isBooked(workoutId: String): Boolean {
-        return try {
-            // Ищем запись с таким workout_id. Если находим - значит записан.
-            val result = db.select {
-                filter {
-                    eq("workout_id", workoutId)
-                }
-            }.decodeList<Booking>()
-
-            result.isNotEmpty() // Возвращает true, если список не пуст
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    // 4. ПОДСЧЕТ ИТОГО (Сумма корзины)
-    suspend fun getTotalBookings(): Int {
-        return try {
-            // Скачиваем все записи текущего пользователя и считаем их количество
-            val result = db.select().decodeList<Booking>()
-            result.size
-        } catch (e: Exception) {
-            0
-        }
-    }
-
     suspend fun getMyBookedWorkoutIds(): List<String> {
         return try {
-            // Скачиваем ваши записи. Благодаря RLS скачаются только ваши.
             val result = db.select().decodeList<Booking>()
-            // Превращаем список объектов Booking в список строк (ID тренировок)
             result.map { it.workout_id }
         } catch (e: Exception) {
             emptyList()
         }
     }
 
-    // Внутри класса BookingRepository:
-    private val dbNotifications = SupabaseClient.client.postgrest["notifications"]
-
-    // Скачать уведомления текущего пользователя
+    // уведомления
     suspend fun getNotifications(): List<AppNotification> {
         return try {
             dbNotifications.select().decodeList<AppNotification>()
@@ -119,7 +83,6 @@ class BookingRepository {
         }
     }
 
-    // Удалить уведомление (прочитано)
     suspend fun deleteNotification(id: String): Boolean {
         return try {
             dbNotifications.delete {
@@ -146,22 +109,19 @@ class BookingRepository {
             val bookedIds = getMyBookedWorkoutIds()
             if (bookedIds.isEmpty()) return null
 
-            // Скачиваем детальную информацию обо ВСЕХ забронированных тренировках
+            // все забронированные тренировки
             val dbWorkouts = SupabaseClient.client.postgrest["workouts"]
             val allBookedWorkouts = dbWorkouts.select {
-                filter { isIn("id", bookedIds) } // Скачиваем только забронированные
+                filter { isIn("id", bookedIds) }
             }.decodeList<Workout>()
 
             if (allBookedWorkouts.isEmpty()) return null
 
-            // Сортируем тренировки по дате и времени их следующего наступления
+            // сортировка по дате
             val sortedWorkouts = allBookedWorkouts.sortedBy { workout ->
                 val dayEnum = mapRussianDayToEnum(workout.day_of_week)
-                // Вычисляем точную дату и время следующего занятия
                 getNextOccurrence(dayEnum, workout.time)
             }
-
-            // Возвращаем ту тренировку, которая наступит раньше остальных
             sortedWorkouts.firstOrNull()
 
         } catch (e: Exception) {
@@ -170,9 +130,7 @@ class BookingRepository {
         }
     }
 
-    // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ РАБОТЫ С ДАТАМИ (Clean Code) ---
-
-    // Превращает русский день недели (ПН, ВТ...) в стандартный системный формат DayOfWeek
+    // вспомогательные функции
     private fun mapRussianDayToEnum(dayStr: String): DayOfWeek {
         return when (dayStr.uppercase()) {
             "ПН" -> DayOfWeek.MONDAY
@@ -185,17 +143,12 @@ class BookingRepository {
             else -> DayOfWeek.MONDAY
         }
     }
-
-    // Вычисляет точную дату и время следующего сеанса тренировки от текущего момента
     private fun getNextOccurrence(targetDay: DayOfWeek, timeStr: String): LocalDateTime {
         val now = LocalDateTime.now()
         val time = LocalTime.parse(timeStr, DateTimeFormatter.ofPattern("HH:mm"))
 
-        // Начинаем расчет, предполагая, что тренировка сегодня
         var targetDateTime = now.with(time)
 
-        // Цикл крутит дни вперед, пока день недели не совпадет,
-        // и пока время тренировки не окажется в будущем от текущего момента
         while (targetDateTime.dayOfWeek != targetDay || targetDateTime.isBefore(now)) {
             targetDateTime = targetDateTime.plusDays(1)
         }

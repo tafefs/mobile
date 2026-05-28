@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:paddingTop="36dp">
 
-        <!-- 1. ФИЛЬТРЫ (Все / Групповые / Персональные) -->
+        <!-- фильтры -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             </LinearLayout>
         </HorizontalScrollView>
 
-        <!-- 2. ДНИ НЕДЕЛИ (ПН / ВТ / СР...) -->
+        <!-- дни недели -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,7 +83,6 @@
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 
-                <!-- Остальные дни (Неактивные) -->
                 <TextView android:id="@+id/tabTue" android:layout_width="wrap_content" android:layout_height="36dp" android:layout_marginStart="8dp" android:background="@drawable/bg_filter_inactive" android:gravity="center" android:paddingHorizontal="16dp" android:text="ВТ" android:textColor="@color/white" />
                 <TextView android:id="@+id/tabWed" android:layout_width="wrap_content" android:layout_height="36dp" android:layout_marginStart="8dp" android:background="@drawable/bg_filter_inactive" android:gravity="center" android:paddingHorizontal="16dp" android:text="СР" android:textColor="@color/white" />
                 <TextView android:id="@+id/tabThu" android:layout_width="wrap_content" android:layout_height="36dp" android:layout_marginStart="8dp" android:background="@drawable/bg_filter_inactive" android:gravity="center" android:paddingHorizontal="16dp" android:text="ЧТ" android:textColor="@color/white" />
@@ -93,7 +92,7 @@
             </LinearLayout>
         </HorizontalScrollView>
 
-        <!-- 3. ЧЕКБОКС "Есть места" -->
+        <!-- чекбокс -->
         <CheckBox
             android:id="@+id/cbHasSpots"
             android:layout_width="wrap_content"
@@ -105,7 +104,7 @@
             android:textColor="@color/white"
             android:textSize="16sp" />
 
-        <!-- 4. ЗАГОЛОВОК СПИСКА И ИТОГО -->
+        <!-- запланировано -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -122,7 +121,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- ЭЛЕМЕНТ ДЛЯ ПОДСЧЕТА ИТОГО (ОН ВЫЗЫВАЛ ОШИБКУ) -->
             <TextView
                 android:id="@+id/tvTotalBookings"
                 android:layout_width="wrap_content"
@@ -135,7 +133,7 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <!-- 5. СПИСОК КАРТОЧКЕ (Имитация) -->
+        <!-- список занятий -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

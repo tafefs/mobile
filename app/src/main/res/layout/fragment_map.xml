@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_background">
 
-    <!-- Верхняя панель с кнопкой "Назад" -->
+    <!-- верхняя панель -->
     <LinearLayout
         android:id="@+id/mapTopBar"
         android:layout_marginTop="16dp"
@@ -33,10 +33,10 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:paddingEnd="60dp"/> <!-- Компенсация кнопки назад для центрирования -->
+            android:paddingEnd="60dp"/>
     </LinearLayout>
 
-    <!-- Сама карта -->
+    <!-- карта -->
     <com.yandex.mapkit.mapview.MapView
         android:id="@+id/mapview"
         android:layout_width="match_parent"

@@ -18,7 +18,7 @@ import com.example.mob_dev.ui.LoginActivity
 import com.example.mob_dev.ui.MainActivity
 import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
-import android.widget.ProgressBar // Не забудьте импорт
+import android.widget.ProgressBar
 import android.widget.LinearLayout
 import android.widget.ImageView
 import coil.load
@@ -56,13 +56,12 @@ class ProfileViewFragment : Fragment() {
         val btnContactSupport = view.findViewById<TextView>(R.id.btnContactSupport)
 
 
-        // --- ЗАГРУЗКА ДАННЫХ ИЗ БАЗЫ ---
-        // Передаем все 4 поля в функцию загрузки
+        // загрузка данных
+
         loadProfileData(tvUserName, tvEmail, tvDob, tvPhone, ivAvatar)
 
-        // --- ПЕРЕХОД НА ЭКРАН РЕДАКТИРОВАНИЯ ---
+
         btnGoToEdit.setOnClickListener {
-            // true означает "добавить в BackStack", чтобы можно было вернуться кнопкой Назад
             (requireActivity() as MainActivity).loadFragment(ProfileEditFragment(), true)
         }
 
@@ -81,7 +80,6 @@ class ProfileViewFragment : Fragment() {
         }
 
 
-        // --- ВЫХОД ИЗ АККАУНТА ---
         btnLogout.setOnClickListener {
             lifecycleScope.launch {
                 try {
@@ -96,7 +94,6 @@ class ProfileViewFragment : Fragment() {
         }
     }
 
-    // --- ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ ДАННЫХ (Clean Code) ---
     private fun loadProfileData(tvName: TextView, tvEmail: TextView, tvDob: TextView, tvPhone: TextView?, ivAvatar: ImageView) {
         progressBar.visibility = View.VISIBLE
         mainContent.visibility = View.GONE
@@ -115,12 +112,11 @@ class ProfileViewFragment : Fragment() {
                 if (!profile.avatar_url.isNullOrEmpty()) {
                     ivAvatar.load(profile.avatar_url) {
                         crossfade(true)
-                        transformations(CircleCropTransformation()) // Делаем круглой
+                        transformations(CircleCropTransformation())
                     }
                 }
             }
 
-            // 2. Данные скачались! Прячем крутилку, показываем контент с плавным появлением
                 progressBar.visibility = View.GONE
                 mainContent.alpha = 0f
                 mainContent.visibility = View.VISIBLE

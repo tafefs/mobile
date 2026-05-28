@@ -8,7 +8,7 @@ import kotlinx.serialization.json.buildJsonObject
 
 class AuthRepository {
 
-    // 1. Метод для входа (у вас уже есть)
+    // вход
     suspend fun loginUser(email: String, pass: String): Boolean {
         return try {
             SupabaseClient.client.auth.signInWith(Email) {
@@ -21,7 +21,7 @@ class AuthRepository {
         }
     }
 
-    // 2. НОВЫЙ Метод для регистрации
+    // регистрация
     suspend fun registerUser(email: String, pass: String, name: String, surname: String): Boolean {
         return try {
             SupabaseClient.client.auth.signUpWith(Email) {
@@ -31,9 +31,9 @@ class AuthRepository {
                     put("full_name", JsonPrimitive("$name $surname"))
                 }
             }
-            true // Успешная регистрация
+            true
         } catch (e: Exception) {
-            false // Ошибка (например, email уже занят)
+            false
         }
     }
 }
