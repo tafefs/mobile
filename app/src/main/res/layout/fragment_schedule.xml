@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="36dp">
+
+        <!-- 1. ФИЛЬТРЫ (Все / Групповые / Персональные) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:paddingHorizontal="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tabAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_filter_active"
+                    android:gravity="center"
+                    android:paddingHorizontal="24dp"
+                    android:text="Все"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tabGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_filter_inactive"
+                    android:gravity="center"
+                    android:paddingHorizontal="24dp"
+                    android:text="Групповые"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/tabPersonal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_filter_inactive"
+                    android:gravity="center"
+                    android:paddingHorizontal="24dp"
+                    android:text="Персональные"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- 2. ДНИ НЕДЕЛИ (ПН / ВТ / СР...) -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:scrollbars="none"
+            android:paddingHorizontal="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tabMon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_filter_active"
+                    android:gravity="center"
+                    android:paddingHorizontal="16dp"
+                    android:text="✓ ПН"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <!-- Остальные дни (Неактивные) -->
+                <TextView android:id="@+id/tabTue" android:layout_width="wrap_content" android:layout_height="36dp" android:layout_marginStart="8dp" android:background="@drawable/bg_filter_inactive" android:gravity="center" android:paddingHorizontal="16dp" android:text="ВТ" android:textColor="@color/white" />
+                <TextView android:id="@+id/tabWed" android:layout_width="wrap_content" android:layout_height="36dp" android:layout_marginStart="8dp" android:background="@drawable/bg_filter_inactive" android:gravity="center" android:paddingHorizontal="16dp" android:text="СР" android:textColor="@color/white" />
+                <TextView android:id="@+id/tabThu" android:layout_width="wrap_content" android:layout_height="36dp" android:layout_marginStart="8dp" android:background="@drawable/bg_filter_inactive" android:gravity="center" android:paddingHorizontal="16dp" android:text="ЧТ" android:textColor="@color/white" />
+                <TextView android:id="@+id/tabFri" android:layout_width="wrap_content" android:layout_height="36dp" android:layout_marginStart="8dp" android:background="@drawable/bg_filter_inactive" android:gravity="center" android:paddingHorizontal="16dp" android:text="ПТ" android:textColor="@color/white" />
+                <TextView android:id="@+id/tabSat" android:layout_width="wrap_content" android:layout_height="36dp" android:layout_marginStart="8dp" android:background="@drawable/bg_filter_inactive" android:gravity="center" android:paddingHorizontal="16dp" android:text="СБ" android:textColor="@color/white" />
+                <TextView android:id="@+id/tabSun" android:layout_width="wrap_content" android:layout_height="36dp" android:layout_marginStart="8dp" android:background="@drawable/bg_filter_inactive" android:gravity="center" android:paddingHorizontal="16dp" android:text="ВС" android:textColor="@color/white" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- 3. ЧЕКБОКС "Есть места" -->
+        <CheckBox
+            android:id="@+id/cbHasSpots"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:buttonTint="#9C27B0"
+            android:text="Есть места"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <!-- 4. ЗАГОЛОВОК СПИСКА И ИТОГО -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="Расписание занятий"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- ЭЛЕМЕНТ ДЛЯ ПОДСЧЕТА ИТОГО (ОН ВЫЗЫВАЛ ОШИБКУ) -->
+            <TextView
+                android:id="@+id/tvTotalBookings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:text="Запланировано: 0"
+                android:textColor="@color/accent_green"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <!-- 5. СПИСОК КАРТОЧКЕ (Имитация) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="32dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvWorkouts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginBottom="32dp"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

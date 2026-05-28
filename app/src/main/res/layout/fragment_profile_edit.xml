@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Аватарка -->
+        <FrameLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_circle_gray"> <!-- Если есть круглый фон, используйте его -->
+
+            <ImageView
+                android:id="@+id/ivAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+        <!-- Поля с информацией -->
+        <EditText
+            android:id="@+id/etNameProfile"
+            style="@style/AppInput"
+            android:layout_marginBottom="12dp"
+            android:hint="Имя"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etSurnameProfile"
+            style="@style/AppInput"
+            android:layout_marginBottom="12dp"
+            android:hint="Фамилия"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etDobProfile"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_input_field"
+            android:hint="Дата рождения"
+            android:inputType="date"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/text_hint" />
+
+        <EditText
+            android:id="@+id/etPhoneProfile"
+            style="@style/AppInput"
+            android:layout_marginBottom="12dp"
+            android:hint="Телефон"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/etEmailProfile"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_input_field"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/text_hint" />
+
+        <!-- Кнопка сохранения -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSaveProfile"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_button_green"
+            android:text="Сохранить изменения"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Кнопка Отменить (Выход) -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCancelProfile"
+            android:layout_width="150dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_input_field"
+            android:backgroundTint="#48484A"
+            android:text="Отменить"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red"> #FF0000</color>
+    <color name="app_background">#1C1C1E</color> <!-- Темный фон -->
+    <color name="input_background">#2C2C2E</color> <!-- Фон полей -->
+    <color name="accent_green">#66FF89</color> <!-- Зеленый цвет кнопок -->
+    <color name="text_hint">#8E8E93</color>
+    <color name="btn_cancel">#48484A</color>
+</resources>

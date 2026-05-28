@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:text="Регистрация"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etNameReg"
+            android:layout_marginBottom="12dp"
+            style="@style/AppInput"
+            android:hint="Имя"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etSurnameReg"
+            android:layout_marginBottom="12dp"
+            style="@style/AppInput"
+            android:hint="Фамилия"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/etDobReg"
+            android:layout_marginBottom="12dp"
+            style="@style/AppInput"
+            android:hint="Дата рождения"
+            android:inputType="date" />
+
+        <!-- EMAIL БЛОК (Отступ 12dp) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/etEmailReg"
+                style="@style/AppInput"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                android:id="@+id/tvEmailErrorReg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingStart="4dp"
+                android:text="Неверный формат Email"
+                android:textColor="#FF453A"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- ПАРОЛЬ БЛОК (Отступ 32dp перед кнопкой) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp">
+
+                <EditText
+                    android:id="@+id/etPassReg"
+                    style="@style/AppInput"
+                    android:hint="Пароль"
+                    android:inputType="textPassword" />
+
+                <ImageView
+                    android:id="@+id/ivTogglePasswordReg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_eye_hidden"
+                    app:tint="@color/text_hint" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvPasswordErrorReg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingStart="4dp"
+                android:text="Пароль должен содержать минимум 6 символов"
+                android:textColor="#FF453A"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnRegister"
+            style="@style/AppButton.Green"
+            android:text="Зарегистрироваться"
+/>
+
+    </LinearLayout>
+</ScrollView>
